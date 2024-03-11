@@ -1,10 +1,14 @@
 import './bootstrap';
+import PrimeVue from 'primevue/config';
+import Lara from '@/../presets/lara';
+import ToastService from 'primevue/toastservice';
+import ConfirmationService from 'primevue/confirmationservice';
 import '../css/app.css';
 
 import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-import { ZiggyVue } from '../../vendor/tightenco/ziggy';
+import { ZiggyVue } from '@/../../vendor/tightenco/ziggy';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -15,7 +19,13 @@ createInertiaApp({
         return createApp({ render: () => h(App, props) })
             .use(plugin)
             .use(ZiggyVue)
-            .mount(el);
+            .use(PrimeVue, {
+                unstyled: true,
+                pt: Lara
+            })
+            .use(ToastService)
+            .use(ConfirmationService)
+            .mount(el)
     },
     progress: {
         color: '#4B5563',
