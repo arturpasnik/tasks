@@ -62,13 +62,13 @@ const confirmedDeleteTask = (event, id) => {
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">Tasks</h2>
         </template>
 
-        <div class="w-full md:w-3/4 md:mx-auto flex flex-col space-y-4 p-3">
+        <div class="w-full md:w-3/4 md:mx-auto flex flex-col space-y-2 p-3">
             <div class="flex flex-col">
-                <InputText type="text" v-model="taskForm.txt" />
-                <div v-if="taskForm.errors.txt" class="text-red-700">{{ taskForm.errors.txt }}</div>
+                <InputText placeholder="Here you can add a task" size="small" type="text" v-model="taskForm.txt" :invalid="taskForm.errors.txt" />
+                <p v-if="taskForm.errors.txt" class="px-2 text-red-700">{{ taskForm.errors.txt }}</p>
             </div>
             <div class="flex justify-end">
-                <Button label="Add" @click="handleNewTask"></Button>
+                <Button size="small" label="Add new task" @click="handleNewTask"></Button>
             </div>
 
 
@@ -89,8 +89,8 @@ const confirmedDeleteTask = (event, id) => {
                         <td class="border-b border-slate-100 p-4 text-slate-500 flex flex-col md:flex-row justify-between">
                             <div :class="{'line-through' : task.status === 2 }">{{ task.txt }}</div>
                             <div class="flex space-x-2">
-                                <Button v-if="task.status === 1" label="Completed" icon="pi pi-check" aria-label="Mark as completed" @click="handleMarkCompletedTask(task.id)" />
-                                <Button @click="confirmedDeleteTask($event, task.id)" icon="pi pi-times" label="Delete" severity="danger"></Button>
+                                <Button size="small" v-if="task.status === 1" label="Completed" icon="pi pi-check" aria-label="Mark as completed" @click="handleMarkCompletedTask(task.id)" />
+                                <Button size="small" @click="confirmedDeleteTask($event, task.id)" icon="pi pi-times" label="Delete" severity="danger"></Button>
                             </div>
                         </td>
                     </tr>
