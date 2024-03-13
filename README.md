@@ -23,6 +23,15 @@ Tailwind CSS works by scanning all of your HTML files, JavaScript components, an
 ### PrimeVUE
 Tailwind CSS Based UI Component Library for Vue.js
 
+### Optional seeder
+run php artisan migrate:fresh --seed
+
+#### login details:
+
+###### tom@tom.com
+
+###### password
+
 
 
 
