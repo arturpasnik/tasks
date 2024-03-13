@@ -30,20 +30,20 @@ class TaskController extends Controller
         $taskData = $request->safe()->only(['txt']);
         $this->taskService->store(new TaskDto(txt: $taskData['txt'], status: TaskStatus::Open));
 
-        return redirect()->back();
+        return redirect()->route('task.index');
     }
 
     public function update(Task $task)
     {
         $task->update(['status'=> TaskStatus::Closed]);
 
-        return redirect()->back();
+        return redirect()->route('task.index');
     }
 
     public function destroy(Task $task)
     {
         $task->delete();
 
-        return redirect()->back();
+        return redirect()->route('task.index');
     }
 }
