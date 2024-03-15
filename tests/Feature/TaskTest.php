@@ -55,9 +55,35 @@ class TaskTest extends TestCase
 
     public function test_update(): void
     {
+        $task = Task::factory()->create();
+        $task->txt = Str::random(30);
+        $response = $this->actingAs($this->user)->post(route('task.update',['task'=>$task->id]),$task->toArray());
+        $response->assertStatus(200);
+    }
+
+    public function test_update_invalid_txt_required(): void
+    {
+        $task = Task::factory()->create();
+        $task->txt = null;
+        $response = $this->actingAs($this->user)->post(route('task.update',['task'=>$task->id]),$task->toArray());
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors(['txt'=> 'Task field can not be empty']);
+    }
+
+    public function test_update_invalid_txt_max_191(): void
+    {
+        $task = Task::factory()->create();
+        $task->txt = Str::random(200);
+        $response = $this->actingAs($this->user)->post(route('task.update',['task'=>$task->id]),$task->toArray());
+        $response->assertStatus(302);
+        $response->assertSessionHasErrors(['txt'=> 'Text for new task exceeded allowance of 191 characters']);
+    }
+
+    public function test_set_status_complete(): void
+    {
 
         $task = Task::factory()->create();
-        $response = $this->actingAs($this->user)->put(route('task.update',['task'=>$task->id]));
+        $response = $this->actingAs($this->user)->get(route('task.setStatusComplete',['task'=>$task->id]));
         $response->assertStatus(302);
         $response->assertRedirect(route('task.index'));
     }

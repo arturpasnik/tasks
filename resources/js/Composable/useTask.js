@@ -18,9 +18,19 @@ export function useTask() {
         });
     };
 
-    const handleMarkCompletedTask = (id) => {
+    const handleTaskUpdate = (task) => {
+        axios.post(route("task.update", {'task': task.id}),task).then(()=>{
+            toast.add({ severity: 'success', summary: 'Success', detail: 'Task updated', life: 4000 })
+            task.editing = false;
+            task.errors = null;
+        }).catch((error) => {
+            task.errors = error.response.data.errors;
+        });
+    };
+
+    const handleSetStatusComplete = (id) => {
         taskForm.id = id;
-        taskForm.put(route("task.update",{'task':id}), {
+        taskForm.get(route("task.setStatusComplete",{'task':id}), {
             onSuccess: () => {
                 taskForm.reset();
                 toast.add({ severity: 'info', summary: 'Update', detail: 'Task marked as completed', life: 4000 });
@@ -45,5 +55,5 @@ export function useTask() {
         });
     };
 
-    return { taskForm, handleNewTask, handleMarkCompletedTask, confirmedDeleteTask }
+    return { taskForm, handleNewTask, handleTaskUpdate, handleSetStatusComplete, confirmedDeleteTask }
 }

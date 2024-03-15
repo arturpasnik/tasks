@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\DTO\TaskDto;
 use App\Enums\TaskStatus;
-use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\Task\StoreTaskRequest;
+use App\Http\Requests\Task\UpdateTaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use App\Services\TaskService;
@@ -33,16 +34,22 @@ class TaskController extends Controller
         return redirect()->route('task.index');
     }
 
-    public function update(Task $task)
+    public function update(Task $task, UpdateTaskRequest $request)
     {
-        $task->update(['status'=> TaskStatus::Closed]);
+        $taskData = $request->safe()->only(['txt']);
+        return $this->taskService->update($task, $taskData);
+    }
+
+    public function setStatusComplete(Task $task)
+    {
+        $this->taskService->update($task, ['status'=> TaskStatus::Closed]);
 
         return redirect()->route('task.index');
     }
 
     public function destroy(Task $task)
     {
-        $task->delete();
+        $this->taskService->delete($task);
 
         return redirect()->route('task.index');
     }

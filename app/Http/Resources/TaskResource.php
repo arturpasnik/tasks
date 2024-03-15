@@ -19,6 +19,7 @@ class TaskResource extends JsonResource
             'id' => $this->id,
             'txt' => $this->txt,
             'status' => $this->status,
+            'editing' => false
         ];
     }
 }

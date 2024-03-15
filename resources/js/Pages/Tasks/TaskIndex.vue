@@ -9,7 +9,7 @@ const props = defineProps({
     tasks: Object
 });
 
-const { taskForm, handleNewTask, handleMarkCompletedTask, confirmedDeleteTask } = useTask();
+const { taskForm, handleNewTask, handleTaskUpdate, handleSetStatusComplete, confirmedDeleteTask } = useTask();
 
 </script>
 
@@ -46,10 +46,16 @@ const { taskForm, handleNewTask, handleMarkCompletedTask, confirmedDeleteTask } 
                     <tr v-for="task in tasks">
                         <td class="border-b border-slate-100 p-4 pl-8 text-slate-500 font-bold">{{ task.id }}</td>
                         <td class="border-b border-slate-100 p-4 text-slate-500 flex flex-col md:flex-row justify-between">
-                            <div :class="{'line-through' : task.status === 2 }">{{ task.txt }}</div>
+                            <div v-if="task.editing" class="flex flex-col w-full mr-4">
+                                <InputText size="small" type="text" v-model="task.txt" :invalid="task.errors && ('txt' in task.errors)" />
+                                <p v-if="task.errors && ('txt' in task.errors)" class="px-2 text-red-700">{{ task.errors.txt[0] }}</p>
+                            </div>
+                            <div v-else :class="{'line-through' : task.status === 2 }">{{ task.txt }}</div>
                             <div class="flex space-x-2">
-                                <Button size="small" v-if="task.status === 1" label="Completed" icon="pi pi-check" aria-label="Mark as completed" @click="handleMarkCompletedTask(task.id)" />
-                                <Button size="small" @click="confirmedDeleteTask($event, task.id)" icon="pi pi-times" label="Delete" severity="danger"></Button>
+                                <Button size="small" class="h-8" v-if="task.status === 1 && !task.editing" label="Edit" aria-label="Edit" @click="task.editing = true" />
+                                <Button size="small" class="h-8" v-if="task.status === 1 && task.editing" label="Save" aria-label="Save" @click="handleTaskUpdate(task)" />
+                                <Button size="small" class="h-8" v-if="task.status === 1" label="Completed" icon="pi pi-check" aria-label="Mark as completed" @click="handleSetStatusComplete(task.id)" />
+                                <Button size="small" class="h-8" @click="confirmedDeleteTask($event, task.id)" icon="pi pi-times" label="Delete" severity="danger"></Button>
                             </div>
                         </td>
                     </tr>
