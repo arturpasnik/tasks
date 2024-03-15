@@ -18,8 +18,8 @@ export function useTask() {
         });
     };
 
-    const handleTaskUpdate = (task) => {
-        axios.post(route("task.update", {'task': task.id}),task).then(()=>{
+    const handleTaskUpdate = async (task) => {
+        await axios.post(route("task.update", {'task': task.id}),task).then(()=>{
             toast.add({ severity: 'success', summary: 'Success', detail: 'Task updated', life: 4000 })
             task.editing = false;
             task.errors = null;
